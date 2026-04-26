@@ -199,12 +199,6 @@ export default function App() {
                         onChange={(v) => updateProfile('name', v)} 
                         placeholder="Name"
                       />
-                      {profile.isVerified && (
-                          <VerificationIcon className="w-4 h-4 text-ig_blue cursor-pointer" onClick={() => updateProfile('isVerified', false)} />
-                      )}
-                      {!profile.isVerified && (
-                          <div className="w-4 h-4 rounded-full border border-gray-600 opacity-30 cursor-pointer" onClick={() => updateProfile('isVerified', true)} title="Toggle Verification"></div>
-                      )}
                   </div>
                   <div className="flex flex-1 justify-around items-center mt-2 text-center">
                      <div className="flex flex-col items-center">
