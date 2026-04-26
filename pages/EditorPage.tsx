@@ -201,18 +201,18 @@ export function EditorPage() {
 
 
   return (
-    <div className="box-border flex h-[100dvh] min-h-0 w-full flex-col overflow-hidden bg-black">
+    <div className="box-border flex h-[100dvh] min-h-0 w-full flex-col overflow-hidden bg-gradient-to-b from-zinc-900 via-zinc-950 to-zinc-950 text-zinc-100">
       <div className="flex min-h-0 flex-1 flex-col md:flex-row md:items-stretch md:justify-center md:gap-3 md:px-3 md:py-1 md:pr-80">
       {/* mobile publish bar */}
-      <div className="w-full shrink-0 border-b border-gray-800 px-3 py-2 space-y-2 md:hidden">
+      <div className="w-full shrink-0 space-y-2 border-b border-white/5 bg-zinc-900/50 px-3 py-2 backdrop-blur-md md:hidden">
         <div className="flex items-center gap-1 text-sm">
-          <span className="text-gray-500 w-8">URL</span>
-          <span className="text-gray-600">/</span>
+          <span className="w-8 text-zinc-500">URL</span>
+          <span className="text-zinc-600">/</span>
           <input
             type="text"
             value={publishSlug}
             onChange={(e) => setPublishSlug(e.target.value)}
-            className="flex-1 bg-gray-900 text-white px-2 py-1.5 rounded border border-gray-700 text-sm min-w-0"
+            className="min-w-0 flex-1 rounded-xl border border-white/10 bg-zinc-950/60 px-2 py-1.5 text-sm text-zinc-100 outline-none transition focus:border-sky-500/40 focus:ring-2 focus:ring-sky-500/20"
             placeholder="avaowens"
             spellCheck={false}
           />
@@ -222,14 +222,14 @@ export function EditorPage() {
             type="button"
             onClick={handlePublish}
             disabled={isPublishing}
-            className="flex-1 bg-ig_blue hover:opacity-90 text-white py-2 rounded-lg flex items-center justify-center gap-2 text-sm disabled:opacity-50"
+            className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-ig_blue py-2 text-sm font-medium text-white shadow-lg shadow-sky-500/20 transition hover:brightness-110 disabled:opacity-50"
           >
             {isPublishing ? <RefreshCw className="w-4 h-4 animate-spin" /> : <UploadCloud className="w-4 h-4" />}
             Publish
           </button>
           <Link
             to="/published"
-            className="flex-1 bg-gray-800 text-center text-white py-2 rounded-lg text-sm border border-gray-600 flex items-center justify-center gap-1"
+            className="flex flex-1 items-center justify-center gap-1 rounded-xl border border-white/10 bg-zinc-800/80 py-2 text-center text-sm text-zinc-100 transition hover:bg-zinc-800"
           >
             <Globe className="w-4 h-4" />
             Sites
@@ -239,7 +239,7 @@ export function EditorPage() {
       </div>
       
       {/* --- Main Phone Container --- */}
-      <div className="relative flex min-h-0 w-full min-w-0 flex-1 flex-col overflow-hidden bg-black text-white md:max-w-[410px] md:shrink-0 md:basis-[410px] md:self-center md:border md:border-gray-800 md:rounded-[40px] md:shadow-2xl md:max-h-[min(100dvh-0.75rem,880px)] md:h-[min(100dvh-0.75rem,880px)]">
+      <div className="relative flex min-h-0 w-full min-w-0 flex-1 flex-col overflow-hidden bg-black text-zinc-100 ring-white/10 md:max-h-[min(100dvh-0.75rem,880px)] md:h-[min(100dvh-0.75rem,880px)] md:max-w-[410px] md:shrink-0 md:basis-[410px] md:self-center md:rounded-[40px] md:shadow-glow md:ring-1">
         
         {/* --- Scrollable Content --- */}
         <div className="min-h-0 flex-1 overflow-y-auto no-scrollbar scrollbar-hide">
@@ -322,7 +322,7 @@ export function EditorPage() {
             {/* Bio Section */}
             <div className="px-1 text-sm">
                <EditableText 
-                 className="text-gray-400 block my-0.5" 
+                 className="my-0.5 block text-zinc-500" 
                  value={profile.category} 
                  onChange={(v) => updateProfile('category', v)} 
                  placeholder="Category"
@@ -337,31 +337,31 @@ export function EditorPage() {
                />
                 
                 {isEditingLink ? (
-                  <div ref={linkEditorRef} className="mt-2 p-2 bg-gray-800/80 rounded-lg border border-gray-700">
+                  <div ref={linkEditorRef} className="mt-2 rounded-xl border border-white/10 bg-zinc-900/80 p-2.5 shadow-inner">
                       <div className="flex flex-col gap-2 text-sm">
                           <div>
-                              <label className="text-xs text-gray-400">Display Text</label>
+                              <label className="text-xs text-zinc-500">Display Text</label>
                               <input 
                                   type="text" 
                                   value={profile.link.text} 
                                   onChange={(e) => updateProfile('link', { ...profile.link, text: e.target.value })}
-                                  className="bg-black/50 text-white w-full p-1 rounded outline-none border border-transparent focus:border-blue-500"
+                                  className="mt-0.5 w-full rounded-lg border border-white/10 bg-black/50 p-1.5 text-zinc-100 outline-none focus:border-sky-500/50 focus:ring-2 focus:ring-sky-500/15"
                               />
                           </div>
                           <div>
-                              <label className="text-xs text-gray-400">URL (e.g., https://your-link.com)</label>
+                              <label className="text-xs text-zinc-500">URL (e.g., https://your-link.com)</label>
                               <input 
                                   type="text" 
                                   value={profile.link.url} 
                                   onChange={(e) => updateProfile('link', { ...profile.link, url: e.target.value })}
-                                  className="bg-black/50 text-white w-full p-1 rounded outline-none border border-transparent focus:border-blue-500"
+                                  className="mt-0.5 w-full rounded-lg border border-white/10 bg-black/50 p-1.5 text-zinc-100 outline-none focus:border-sky-500/50 focus:ring-2 focus:ring-sky-500/15"
                               />
                           </div>
                       </div>
                   </div>
                 ) : (
                   <div
-                    className="flex items-center gap-1 mt-1 text-ig_link font-medium cursor-pointer hover:bg-white/10 p-0.5 rounded"
+                    className="mt-1 flex cursor-pointer items-center gap-1 rounded-md p-0.5 font-medium text-ig_link transition hover:bg-white/[0.07]"
                     onClick={() => setIsEditingLink(true)}
                   >
                       <svg aria-label="Link icon" fill="currentColor" height="12" role="img" viewBox="0 0 24 24" width="12"><path d="m9.364 10.776-.328-.329A6.027 6.027 0 0 0 3.65 9.07a6.028 6.028 0 0 0-2.096 9.682l3.652 3.651a6.026 6.026 0 0 0 8.524 0 6.026 6.026 0 0 0 0-8.523l-.329-.328a1 1 0 1 0-1.414 1.414l.329.328a4.026 4.026 0 0 1 0 5.695 4.026 4.026 0 0 1-5.695 0L2.97 17.337a4.029 4.029 0 0 1 1.4-6.47 4.026 4.026 0 0 1 4.294.943l.329.329a1 1 0 1 0 1.414-1.414Zm12.182-8.322a6.027 6.027 0 0 0-8.524 0l-.329.329a1 1 0 1 0 1.414 1.414l.329-.328a4.026 4.026 0 0 1 5.695 0 4.026 4.026 0 0 1 0 5.695l-3.652 3.651a4.028 4.028 0 0 1-5.694 0 4.029 4.029 0 0 1-1.4-6.47 1 1 0 1 0-1.572 1.144 6.029 6.029 0 0 0 2.096 9.683 6.026 6.026 0 0 0 8.524 0l3.651-3.651a6.027 6.027 0 0 0 0-8.524ZM13.842 8.745a1 1 0 0 0-1.414 1.414l2.828 2.829a1 1 0 1 0 1.414-1.414Z"></path></svg>
@@ -372,9 +372,9 @@ export function EditorPage() {
             </div>
 
             {/* Buttons */}
-            <div className="flex gap-1.5 mt-4 text-sm font-semibold">
-              <button className="flex-1 bg-ig_blue text-white py-1.5 rounded-lg active:opacity-80">Follow</button>
-              <button className="flex-1 bg-ig_gray text-white py-1.5 rounded-lg active:opacity-80">Message</button>
+            <div className="mt-4 flex gap-1.5 text-sm font-semibold">
+              <button type="button" className="flex-1 rounded-xl bg-ig_blue py-2 text-white shadow-md shadow-sky-500/15 transition active:scale-[0.99] active:opacity-90">Follow</button>
+              <button type="button" className="flex-1 rounded-xl border border-white/5 bg-ig_gray py-2 text-white transition active:scale-[0.99] active:opacity-90">Message</button>
             </div>
 
             {/* Highlights */}
@@ -418,22 +418,22 @@ export function EditorPage() {
           </div>
           
           {/* Tab Navigation */}
-          <div className="flex justify-around border-t border-ig_separator mt-2">
+          <div className="mt-2 flex justify-around border-t border-ig_separator/80">
              <div 
-                className={`flex-1 py-2.5 flex justify-center ${activeTab === 'grid' ? 'border-b border-white text-white' : 'text-gray-500'}`}
+                className={`flex flex-1 justify-center border-b-2 border-transparent py-2.5 ${activeTab === 'grid' ? 'border-sky-400 text-white' : 'text-zinc-500'}`}
              >
                 <Grid size={24} />
              </div>
              <div 
-                className={`flex-1 py-2.5 flex justify-center cursor-pointer ${activeTab === 'reels' ? 'border-b border-white text-white' : 'text-gray-500'}`}
+                className={`flex flex-1 cursor-pointer justify-center border-b-2 border-transparent py-2.5 ${activeTab === 'reels' ? 'border-sky-400 text-white' : 'text-zinc-500'}`}
                 onClick={() => setActiveTab('reels')}
              >
-                <ReelsIcon className={activeTab === 'reels' ? 'text-white' : 'text-gray-500'} />
+                <ReelsIcon className={activeTab === 'reels' ? 'text-white' : 'text-zinc-500'} />
              </div>
              <div 
-                className={`flex-1 py-2.5 flex justify-center ${activeTab === 'tagged' ? 'border-b border-white text-white' : 'text-gray-500'}`}
+                className={`flex flex-1 justify-center border-b-2 border-transparent py-2.5 ${activeTab === 'tagged' ? 'border-sky-400 text-white' : 'text-zinc-500'}`}
              >
-                <TaggedIcon className={activeTab === 'tagged' ? 'text-white' : 'text-gray-500'} />
+                <TaggedIcon className={activeTab === 'tagged' ? 'text-white' : 'text-zinc-500'} />
              </div>
           </div>
 
@@ -441,7 +441,7 @@ export function EditorPage() {
           {activeTab === 'grid' && (
             <div className="grid grid-cols-3 gap-0.5 pb-4">
                {profile.posts.map(post => (
-                 <div key={post.id} className="relative aspect-square bg-gray-800 group overflow-hidden">
+                 <div key={post.id} className="relative aspect-square overflow-hidden bg-zinc-800 group">
                     <EditableImage 
                        src={post.imageUrl} 
                        onChange={(v) => updatePost(post.id, { imageUrl: v })}
@@ -476,7 +476,7 @@ export function EditorPage() {
           {activeTab === 'reels' && (
             <div className="grid grid-cols-3 gap-0.5 pb-4">
               {profile.reels.map((reel) => (
-                <div key={reel.id} className="relative aspect-[3/4] bg-gray-800 group">
+                <div key={reel.id} className="relative aspect-[3/4] bg-zinc-800 group">
                   <EditableImage
                     src={reel.imageUrl}
                     onChange={(v) => updateReel(reel.id, { imageUrl: v })}
@@ -497,8 +497,8 @@ export function EditorPage() {
           )}
 
            {activeTab === 'tagged' && (
-             <div className="flex flex-col items-center justify-center py-20 text-gray-400">
-               <div className="w-16 h-16 rounded-full border-2 border-gray-600 flex items-center justify-center mb-4">
+             <div className="flex flex-col items-center justify-center py-20 text-zinc-500">
+               <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full border-2 border-zinc-600">
                  <TaggedIcon className="w-8 h-8" />
                </div>
                <h3 className="font-bold text-xl text-white">Photos of you</h3>
@@ -512,16 +512,17 @@ export function EditorPage() {
       </div>
 
       {/* --- Floating Tools (Desktop side panel) --- */}
-      <div className="fixed right-3 top-2 bottom-2 z-20 hidden w-72 flex-col gap-3 overflow-y-auto rounded-xl border border-gray-700 bg-gray-900 p-3 shadow-xl md:flex">
+      <div className="fixed right-3 top-2 bottom-2 z-20 hidden w-72 flex-col gap-3 overflow-y-auto rounded-2xl border border-white/10 bg-zinc-900/90 p-4 shadow-glow backdrop-blur-xl md:flex">
+        <p className="text-xs font-medium uppercase tracking-wider text-zinc-500">Publish &amp; export</p>
         <div className="flex flex-col gap-2">
-          <label className="text-sm font-medium text-gray-300">Published page path</label>
-          <div className="flex items-center gap-1 text-sm text-gray-500">
+          <label className="text-sm font-medium text-zinc-300">Published page path</label>
+          <div className="flex items-center gap-1 text-sm text-zinc-500">
             <span>/</span>
             <input
               type="text"
               value={publishSlug}
               onChange={(e) => setPublishSlug(e.target.value)}
-              className="flex-1 bg-gray-800 text-white p-2 rounded border border-gray-600 text-sm min-w-0"
+              className="min-w-0 flex-1 rounded-xl border border-white/10 bg-zinc-950/50 p-2.5 text-sm text-zinc-100 outline-none transition focus:border-sky-500/40 focus:ring-2 focus:ring-sky-500/20"
               placeholder="avaowens"
               spellCheck={false}
             />
@@ -531,14 +532,14 @@ export function EditorPage() {
               type="button"
               onClick={handlePublish}
               disabled={isPublishing}
-              className="flex-1 bg-ig_blue hover:opacity-90 text-white py-2 rounded-lg flex items-center justify-center gap-2 text-sm disabled:opacity-50"
+              className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-ig_blue py-2.5 text-sm font-medium text-white shadow-lg shadow-sky-500/20 transition hover:brightness-110 disabled:opacity-50"
             >
               {isPublishing ? <RefreshCw className="w-4 h-4 animate-spin" /> : <UploadCloud className="w-4 h-4" />}
               Publish
             </button>
             <Link
               to="/published"
-              className="shrink-0 bg-gray-800 text-white p-2 rounded-lg border border-gray-600 flex items-center justify-center"
+              className="flex shrink-0 items-center justify-center rounded-xl border border-white/10 bg-zinc-800/90 p-2.5 text-zinc-100 transition hover:bg-zinc-800"
               title="All published sites"
             >
               <Globe className="w-5 h-5" />
@@ -546,56 +547,56 @@ export function EditorPage() {
           </div>
           {publishNote && <p className="text-xs text-amber-200/90">{publishNote}</p>}
         </div>
-        <hr className="border-gray-700" />
+        <hr className="border-white/10" />
         <button
             onClick={handleExport}
             disabled={isExporting}
-            className="w-full bg-gray-700 hover:bg-gray-600 text-white py-2 rounded-lg flex items-center justify-center gap-2 transition-colors disabled:opacity-50"
+            className="flex w-full items-center justify-center gap-2 rounded-xl border border-white/10 bg-zinc-800/90 py-2.5 text-sm font-medium text-zinc-100 transition hover:bg-zinc-800 disabled:opacity-50"
         >
             {isExporting ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Download className="w-4 h-4" />}
             {isExporting ? 'Exporting...' : 'Export HTML'}
         </button>
         
-        <hr className="border-gray-700" />
+        <hr className="border-white/10" />
         
         <div className="flex flex-col gap-3">
           <div className="flex flex-col gap-1">
-            <label className="text-sm font-medium text-gray-300">Follow Button URL</label>
+            <label className="text-sm font-medium text-zinc-300">Follow Button URL</label>
             <input
               type="text"
               placeholder="https://..."
               value={profile.followUrl}
               onChange={(e) => updateProfile('followUrl', e.target.value)}
-              className="bg-gray-800 text-white w-full p-2 rounded outline-none border border-gray-600 focus:border-blue-500 text-sm"
+              className="w-full rounded-xl border border-white/10 bg-zinc-950/50 p-2.5 text-sm text-zinc-100 outline-none transition focus:border-sky-500/40 focus:ring-2 focus:ring-sky-500/20"
             />
           </div>
           <div className="flex flex-col gap-1">
-            <label className="text-sm font-medium text-gray-300">Message Button URL</label>
+            <label className="text-sm font-medium text-zinc-300">Message Button URL</label>
             <input
               type="text"
               placeholder="https://..."
               value={profile.messageUrl}
               onChange={(e) => updateProfile('messageUrl', e.target.value)}
-              className="bg-gray-800 text-white w-full p-2 rounded outline-none border border-gray-600 focus:border-blue-500 text-sm"
+              className="w-full rounded-xl border border-white/10 bg-zinc-950/50 p-2.5 text-sm text-zinc-100 outline-none transition focus:border-sky-500/40 focus:ring-2 focus:ring-sky-500/20"
             />
           </div>
           <div className="flex flex-col gap-1">
-            <label className="text-sm font-medium text-gray-300">Reels Redirect URL</label>
+            <label className="text-sm font-medium text-zinc-300">Reels Redirect URL</label>
             <input
               type="text"
               placeholder="https://..."
               value={profile.reelsUrl}
               onChange={(e) => updateProfile('reelsUrl', e.target.value)}
-              className="bg-gray-800 text-white w-full p-2 rounded outline-none border border-gray-600 focus:border-blue-500 text-sm"
+              className="w-full rounded-xl border border-white/10 bg-zinc-950/50 p-2.5 text-sm text-zinc-100 outline-none transition focus:border-sky-500/40 focus:ring-2 focus:ring-sky-500/20"
             />
           </div>
         </div>
 
 
-        <div className="text-xs text-gray-400 space-y-2">
+        <div className="space-y-2 text-xs text-zinc-500">
           <p>Click any text or image on the phone preview to edit it directly.</p>
           <p>
-            In the bio, <span className="text-gray-300">(country)</span> and <span className="text-gray-300">(city)</span> are replaced with the viewer&apos;s location when <code className="text-gray-500">VITE_IPINFO_TOKEN</code> is set (IPinfo).
+            In the bio, <span className="text-zinc-300">(country)</span> and <span className="text-zinc-300">(city)</span> are replaced with the viewer&apos;s location when <code className="rounded bg-zinc-800/80 px-1 text-zinc-400">VITE_IPINFO_TOKEN</code> is set (IPinfo).
           </p>
         </div>
       </div>

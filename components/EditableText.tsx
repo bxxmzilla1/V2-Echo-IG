@@ -53,7 +53,7 @@ export const EditableText: React.FC<EditableTextProps> = ({
           value={localValue}
           onChange={(e) => setLocalValue(e.target.value)}
           onBlur={handleBlur}
-          className={`bg-gray-800/50 text-white p-1 rounded outline-none resize-none w-full border border-blue-500 ${className}`}
+          className={`w-full resize-none rounded-lg border border-sky-500/50 bg-zinc-900/90 p-1.5 text-zinc-100 shadow-inner shadow-black/20 outline-none ring-2 ring-sky-500/20 transition-shadow ${className}`}
           rows={3}
         />
       );
@@ -66,7 +66,7 @@ export const EditableText: React.FC<EditableTextProps> = ({
         onChange={(e) => setLocalValue(e.target.value)}
         onBlur={handleBlur}
         onKeyDown={handleKeyDown}
-        className={`bg-gray-800/50 text-white px-1 rounded outline-none min-w-[20px] border border-blue-500 ${className}`}
+        className={`min-w-[20px] rounded-md border border-sky-500/50 bg-zinc-900/90 px-1.5 text-zinc-100 shadow-inner shadow-black/20 outline-none ring-2 ring-sky-500/20 transition-shadow ${className}`}
       />
     );
   }
@@ -82,7 +82,7 @@ export const EditableText: React.FC<EditableTextProps> = ({
         e.stopPropagation();
         setIsEditing(true);
       }} 
-      className={`cursor-pointer hover:bg-white/10 hover:rounded px-0.5 transition-colors whitespace-pre-wrap ${className} ${!localValue ? 'opacity-50 italic' : ''}`}
+      className={`cursor-pointer whitespace-pre-wrap rounded px-0.5 transition-colors hover:bg-white/[0.07] ${className} ${!localValue ? 'opacity-50 italic' : ''}`}
     >
       {displayText || placeholder}
     </span>

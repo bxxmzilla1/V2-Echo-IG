@@ -93,7 +93,7 @@ export const generateExportHtml = async (profile: ProfileData): Promise<string> 
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
       tailwind.config = {
-        theme: { extend: { colors: { ig_blue: '#0095f6', ig_gray: '#363636', ig_link: '#e0f1ff', ig_separator: '#262626', ig_secondary: '#a8a8a8' } } },
+        theme: { extend: { colors: { ig_blue: '#0ea5e9', ig_gray: '#3f3f46', ig_link: '#7dd3fc', ig_separator: '#3f3f46', ig_secondary: '#a1a1aa' } } },
       }
     </script>
     <style>
@@ -102,7 +102,7 @@ export const generateExportHtml = async (profile: ProfileData): Promise<string> 
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
-<body class="bg-black flex justify-center pt-0 md:pt-10 pb-10">
+<body class="flex justify-center bg-zinc-950 pt-0 pb-10 text-zinc-100 md:pt-10">
     <div class="w-full md:w-[410px] bg-black text-white">
         <div class="h-12 px-4 flex justify-between items-center bg-black pt-4">
             <div class="flex items-center gap-6">

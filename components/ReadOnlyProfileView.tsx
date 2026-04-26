@@ -21,7 +21,7 @@ export function ReadOnlyProfileView({ profile, viewerGeo, onBack }: Props) {
   const bio = applyGeoPlaceholders(profile.bio, viewerGeo);
 
   return (
-    <div className="relative w-full md:w-[410px] min-h-full md:max-h-[880px] bg-black md:border md:border-gray-800 md:rounded-[40px] overflow-hidden flex flex-col text-white shadow-2xl">
+    <div className="relative flex min-h-full w-full flex-col overflow-hidden bg-black text-zinc-100 ring-white/10 md:max-h-[880px] md:w-[410px] md:rounded-[40px] md:shadow-glow md:ring-1">
       <div className="flex-1 scrollbar-hide overflow-y-auto no-scrollbar">
         <div className="h-12 px-4 flex justify-between items-center bg-black pt-4">
           <div className="flex items-center gap-6">
@@ -67,7 +67,7 @@ export function ReadOnlyProfileView({ profile, viewerGeo, onBack }: Props) {
           </div>
 
           <div className="px-1 text-sm">
-            <span className="text-gray-400 block my-0.5">{profile.category}</span>
+            <span className="my-0.5 block text-zinc-500">{profile.category}</span>
             <p className="block whitespace-pre-wrap leading-tight">{bio}</p>
             <a
               href={ensureUrl(profile.link.url)}
@@ -87,7 +87,7 @@ export function ReadOnlyProfileView({ profile, viewerGeo, onBack }: Props) {
               href={ensureUrl(profile.followUrl)}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex-1 bg-ig_blue text-white py-1.5 rounded-lg text-center no-underline"
+              className="flex-1 rounded-xl bg-ig_blue py-2 text-center text-sm font-semibold text-white no-underline shadow-md shadow-sky-500/15"
             >
               Follow
             </a>
@@ -95,7 +95,7 @@ export function ReadOnlyProfileView({ profile, viewerGeo, onBack }: Props) {
               href={ensureUrl(profile.messageUrl)}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex-1 bg-ig_gray text-white py-1.5 rounded-lg text-center no-underline"
+              className="flex-1 rounded-xl border border-white/5 bg-ig_gray py-2 text-center text-sm font-semibold text-white no-underline"
             >
               Message
             </a>
@@ -104,7 +104,7 @@ export function ReadOnlyProfileView({ profile, viewerGeo, onBack }: Props) {
           <div className="flex gap-4 mt-6 overflow-x-auto no-scrollbar pb-2 px-1">
             {profile.highlights.map((hl) => (
               <div key={hl.id} className="flex flex-col items-center gap-1 min-w-[70px]">
-                <div className="w-[64px] h-[64px] rounded-full bg-gray-800 border border-gray-700 p-[1px]">
+                <div className="h-[64px] w-[64px] rounded-full border border-white/10 bg-zinc-800 p-px">
                   <div className="w-full h-full rounded-full overflow-hidden bg-black">
                     <img src={hl.imageUrl} alt="" className="w-full h-full opacity-90 object-cover" />
                   </div>
@@ -115,11 +115,11 @@ export function ReadOnlyProfileView({ profile, viewerGeo, onBack }: Props) {
           </div>
         </div>
 
-        <div className="flex justify-around border-t border-ig_separator mt-2">
+        <div className="mt-2 flex justify-around border-t border-ig_separator/80">
           <button
             type="button"
-            className={`flex-1 py-2.5 flex justify-center border-0 bg-transparent ${
-              activeTab === 'grid' ? 'border-b border-white text-white' : 'text-gray-500'
+            className={`flex flex-1 justify-center border-b-2 border-transparent bg-transparent py-2.5 ${
+              activeTab === 'grid' ? 'border-sky-400 text-white' : 'text-zinc-500'
             }`}
             onClick={() => setActiveTab('grid')}
           >
@@ -127,28 +127,28 @@ export function ReadOnlyProfileView({ profile, viewerGeo, onBack }: Props) {
           </button>
           <button
             type="button"
-            className={`flex-1 py-2.5 flex justify-center ${
-              activeTab === 'reels' ? 'border-b border-white text-white' : 'text-gray-500'
+            className={`flex flex-1 justify-center border-b-2 border-transparent py-2.5 ${
+              activeTab === 'reels' ? 'border-sky-400 text-white' : 'text-zinc-500'
             }`}
             onClick={() => setActiveTab('reels')}
           >
-            <ReelsIcon className={activeTab === 'reels' ? 'text-white' : 'text-gray-500'} />
+            <ReelsIcon className={activeTab === 'reels' ? 'text-white' : 'text-zinc-500'} />
           </button>
           <button
             type="button"
-            className={`flex-1 py-2.5 flex justify-center ${
-              activeTab === 'tagged' ? 'border-b border-white text-white' : 'text-gray-500'
+            className={`flex flex-1 justify-center border-b-2 border-transparent py-2.5 ${
+              activeTab === 'tagged' ? 'border-sky-400 text-white' : 'text-zinc-500'
             }`}
             onClick={() => setActiveTab('tagged')}
           >
-            <TaggedIcon className={activeTab === 'tagged' ? 'text-white' : 'text-gray-500'} />
+            <TaggedIcon className={activeTab === 'tagged' ? 'text-white' : 'text-zinc-500'} />
           </button>
         </div>
 
         {activeTab === 'grid' && (
           <div className="grid grid-cols-3 gap-0.5 pb-4">
             {profile.posts.map((post) => (
-              <div key={post.id} className="relative aspect-square bg-gray-800 overflow-hidden">
+              <div key={post.id} className="relative aspect-square overflow-hidden bg-zinc-800">
                 <img src={post.imageUrl} alt="" className="w-full h-full object-cover" />
                 <div className="absolute top-2 right-2 flex flex-col gap-1 pointer-events-none">
                   {post.isPinned && <Pin size={16} className="fill-white text-white rotate-45 drop-shadow-md" />}
@@ -167,7 +167,7 @@ export function ReadOnlyProfileView({ profile, viewerGeo, onBack }: Props) {
                 href={ensureUrl(profile.reelsUrl)}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="block relative aspect-[3/4] bg-gray-800"
+                className="relative block aspect-[3/4] bg-zinc-800"
               >
                 <img src={reel.imageUrl} alt="" className="w-full h-full object-cover" />
                 <div className="absolute bottom-0 left-0 right-0 h-1/3 bg-gradient-to-t from-black/60 to-transparent pointer-events-none" />
@@ -181,8 +181,8 @@ export function ReadOnlyProfileView({ profile, viewerGeo, onBack }: Props) {
         )}
 
         {activeTab === 'tagged' && (
-          <div className="flex flex-col items-center justify-center py-20 text-gray-400">
-            <div className="w-16 h-16 rounded-full border-2 border-gray-600 flex items-center justify-center mb-4">
+          <div className="flex flex-col items-center justify-center py-20 text-zinc-500">
+            <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full border-2 border-zinc-600">
               <TaggedIcon className="w-8 h-8" />
             </div>
             <h3 className="font-bold text-xl text-white">Photos of you</h3>

@@ -20,8 +20,8 @@ export default defineConfig(({ mode }) => {
           short_name: 'Echo IG',
           description:
             'A fully editable, WYSIWYG Instagram profile creator with AI-powered content generation capabilities.',
-          theme_color: '#000000',
-          background_color: '#000000',
+          theme_color: '#09090b',
+          background_color: '#09090b',
           display: 'standalone',
           orientation: 'portrait',
           scope: '/',

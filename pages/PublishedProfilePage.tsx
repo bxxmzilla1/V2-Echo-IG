@@ -37,17 +37,17 @@ export function PublishedProfilePage() {
 
   if (profile === undefined) {
     return (
-      <div className="min-h-screen bg-black text-white flex items-center justify-center">
-        <p className="text-gray-400">Loading…</p>
+      <div className="flex min-h-dvh items-center justify-center bg-gradient-to-b from-zinc-900 via-zinc-950 to-zinc-950 text-zinc-100">
+        <p className="text-zinc-500">Loading…</p>
       </div>
     );
   }
 
   if (profile === null) {
     return (
-      <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center gap-4 px-4">
-        <p className="text-lg">No page at /{slug}</p>
-        <Link to="/" className="text-ig_blue underline">
+      <div className="flex min-h-dvh flex-col items-center justify-center gap-4 bg-gradient-to-b from-zinc-900 via-zinc-950 to-zinc-950 px-4 text-zinc-100">
+        <p className="text-lg text-zinc-200">No page at /{slug}</p>
+        <Link to="/" className="font-medium text-ig_blue hover:underline">
           Back to editor
         </Link>
       </div>
@@ -55,14 +55,14 @@ export function PublishedProfilePage() {
   }
 
   return (
-    <div className="w-full min-h-screen bg-black flex flex-col items-center pt-0 md:pt-10 pb-10">
+    <div className="flex min-h-dvh w-full flex-col items-center bg-gradient-to-b from-zinc-900 via-zinc-950 to-zinc-950 pb-10 pt-0 text-zinc-100 md:pt-10">
       <ReadOnlyProfileView
         profile={profile}
         viewerGeo={viewerGeo}
         onBack={() => navigate('/')}
       />
-      <p className="text-xs text-gray-600 mt-4">
-        <Link to="/published" className="text-gray-500 hover:text-gray-400">
+      <p className="mt-4 text-xs text-zinc-600">
+        <Link to="/published" className="text-zinc-500 transition hover:text-zinc-400">
           All published pages
         </Link>
       </p>
