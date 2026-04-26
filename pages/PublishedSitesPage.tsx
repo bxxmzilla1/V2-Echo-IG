@@ -7,6 +7,7 @@ import {
   type PublishedListRow,
 } from '../services/supabasePublish';
 import { getSupabase } from '../lib/supabase';
+import { APP_NAME } from '../lib/appName';
 
 export function PublishedSitesPage() {
   const [rows, setRows] = useState<PublishedListRow[] | null>(null);
@@ -58,7 +59,10 @@ export function PublishedSitesPage() {
   return (
     <div className="mx-auto min-h-dvh max-w-lg bg-gradient-to-b from-zinc-900 via-zinc-950 to-zinc-950 px-4 py-10 text-zinc-100">
       <div className="mb-8 flex items-center justify-between">
-        <h1 className="text-2xl font-semibold tracking-tight">Published pages</h1>
+        <div>
+          <p className="text-xs font-medium uppercase tracking-wider text-zinc-500">{APP_NAME}</p>
+          <h1 className="text-2xl font-semibold tracking-tight">Published pages</h1>
+        </div>
         <Link
           to="/"
           className="rounded-full border border-white/10 bg-zinc-800/80 px-3 py-1.5 text-sm font-medium text-sky-400 transition hover:bg-zinc-800"

@@ -10,14 +10,12 @@ import {
   RefreshCw,
   Plus,
   X,
-  Download,
   Globe,
   UploadCloud
 } from 'lucide-react';
 import { INITIAL_PROFILE, ProfileData, Highlight, Reel, Post } from '../types';
 import { EditableText } from '../components/EditableText';
 import { EditableImage } from '../components/EditableImage';
-import { generateExportHtml } from '../services/exportService';
 import { fetchViewerGeo, applyGeoPlaceholders, type ViewerGeo } from '../services/ipinfoService';
 import { ReelsIcon, TaggedIcon, VerificationIcon } from '../components/ig/ProfileIcons';
 import {
@@ -27,12 +25,12 @@ import {
   getPublishedProfileBySlug,
 } from '../services/supabasePublish';
 import { getSupabase } from '../lib/supabase';
+import { APP_NAME } from '../lib/appName';
 
 export function EditorPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [profile, setProfile] = useState<ProfileData>(INITIAL_PROFILE);
   const [activeTab, setActiveTab] = useState<'grid' | 'reels' | 'tagged'>('reels');
-  const [isExporting, setIsExporting] = useState(false);
   const [isEditingLink, setIsEditingLink] = useState(false);
   const [viewerGeo, setViewerGeo] = useState<ViewerGeo | null>(null);
   const [publishSlug, setPublishSlug] = useState(() => sanitizeSlug(INITIAL_PROFILE.username));
@@ -113,27 +111,6 @@ export function EditorPage() {
     }
   };
 
-  const handleExport = async () => {
-    setIsExporting(true);
-    try {
-        const htmlContent = await generateExportHtml(profile);
-        const blob = new Blob([htmlContent], { type: 'text/html' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `${profile.username}-profile.html`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-    } catch (error) {
-        console.error("Failed to export profile:", error);
-        alert("An error occurred while exporting the profile. See console for details.");
-    } finally {
-        setIsExporting(false);
-    }
-  };
-
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
         if (linkEditorRef.current && !linkEditorRef.current.contains(event.target as Node)) {
@@ -202,9 +179,16 @@ export function EditorPage() {
 
   return (
     <div className="box-border flex h-[100dvh] min-h-0 w-full flex-col overflow-hidden bg-gradient-to-b from-zinc-900 via-zinc-950 to-zinc-950 text-zinc-100">
+      <p
+        className="pointer-events-none fixed left-3 top-2 z-30 hidden text-xs font-medium tracking-wide text-zinc-500 md:block"
+        aria-hidden
+      >
+        {APP_NAME}
+      </p>
       <div className="flex min-h-0 flex-1 flex-col md:flex-row md:items-stretch md:justify-center md:gap-3 md:px-3 md:py-1 md:pr-80">
       {/* mobile publish bar */}
       <div className="w-full shrink-0 space-y-2 border-b border-white/5 bg-zinc-900/50 px-3 py-2 backdrop-blur-md md:hidden">
+        <p className="text-center text-xs font-medium tracking-wide text-zinc-500">{APP_NAME}</p>
         <div className="flex items-center gap-1 text-sm">
           <span className="w-8 text-zinc-500">URL</span>
           <span className="text-zinc-600">/</span>
@@ -513,7 +497,7 @@ export function EditorPage() {
 
       {/* --- Floating Tools (Desktop side panel) --- */}
       <div className="fixed right-3 top-2 bottom-2 z-20 hidden w-72 flex-col gap-3 overflow-y-auto rounded-2xl border border-white/10 bg-zinc-900/90 p-4 shadow-glow backdrop-blur-xl md:flex">
-        <p className="text-xs font-medium uppercase tracking-wider text-zinc-500">Publish &amp; export</p>
+        <p className="text-xs font-medium uppercase tracking-wider text-zinc-500">Publish</p>
         <div className="flex flex-col gap-2">
           <label className="text-sm font-medium text-zinc-300">Published page path</label>
           <div className="flex items-center gap-1 text-sm text-zinc-500">
@@ -547,16 +531,6 @@ export function EditorPage() {
           </div>
           {publishNote && <p className="text-xs text-amber-200/90">{publishNote}</p>}
         </div>
-        <hr className="border-white/10" />
-        <button
-            onClick={handleExport}
-            disabled={isExporting}
-            className="flex w-full items-center justify-center gap-2 rounded-xl border border-white/10 bg-zinc-800/90 py-2.5 text-sm font-medium text-zinc-100 transition hover:bg-zinc-800 disabled:opacity-50"
-        >
-            {isExporting ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Download className="w-4 h-4" />}
-            {isExporting ? 'Exporting...' : 'Export HTML'}
-        </button>
-        
         <hr className="border-white/10" />
         
         <div className="flex flex-col gap-3">
