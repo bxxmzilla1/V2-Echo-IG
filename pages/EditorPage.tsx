@@ -201,10 +201,10 @@ export function EditorPage() {
 
 
   return (
-    <div className="w-full min-h-screen bg-black flex flex-col md:flex-row justify-center items-center md:items-start pt-0 md:pt-10 pb-10">
-      <div className="w-full max-w-2xl md:max-w-none flex flex-col md:flex-row justify-center items-center gap-0 md:gap-6">
+    <div className="box-border flex h-[100dvh] min-h-0 w-full flex-col overflow-hidden bg-black">
+      <div className="flex min-h-0 flex-1 flex-col md:flex-row md:items-stretch md:justify-center md:gap-3 md:px-3 md:py-1 md:pr-80">
       {/* mobile publish bar */}
-      <div className="w-full md:hidden border-b border-gray-800 px-3 py-3 space-y-2">
+      <div className="w-full shrink-0 border-b border-gray-800 px-3 py-2 space-y-2 md:hidden">
         <div className="flex items-center gap-1 text-sm">
           <span className="text-gray-500 w-8">URL</span>
           <span className="text-gray-600">/</span>
@@ -239,10 +239,10 @@ export function EditorPage() {
       </div>
       
       {/* --- Main Phone Container --- */}
-      <div className="relative w-full md:w-[410px] md:h-[calc(100vh-5rem)] md:max-h-[880px] bg-black md:border md:border-gray-800 md:rounded-[40px] overflow-hidden flex flex-col text-white shadow-2xl">
+      <div className="relative flex min-h-0 w-full min-w-0 flex-1 flex-col overflow-hidden bg-black text-white md:max-w-[410px] md:shrink-0 md:basis-[410px] md:self-center md:border md:border-gray-800 md:rounded-[40px] md:shadow-2xl md:max-h-[min(100dvh-0.75rem,880px)] md:h-[min(100dvh-0.75rem,880px)]">
         
         {/* --- Scrollable Content --- */}
-        <div className="flex-1 scrollbar-hide overflow-y-auto no-scrollbar">
+        <div className="min-h-0 flex-1 overflow-y-auto no-scrollbar scrollbar-hide">
 
           {/* --- Header --- */}
           <div className="h-12 px-4 flex justify-between items-center bg-black pt-4">
@@ -512,7 +512,7 @@ export function EditorPage() {
       </div>
 
       {/* --- Floating Tools (Desktop side panel) --- */}
-      <div className="hidden md:flex fixed right-8 top-10 flex-col gap-4 bg-gray-900 p-4 rounded-xl border border-gray-700 w-72 max-h-[90vh] overflow-y-auto shadow-xl z-20">
+      <div className="fixed right-3 top-2 bottom-2 z-20 hidden w-72 flex-col gap-3 overflow-y-auto rounded-xl border border-gray-700 bg-gray-900 p-3 shadow-xl md:flex">
         <div className="flex flex-col gap-2">
           <label className="text-sm font-medium text-gray-300">Published page path</label>
           <div className="flex items-center gap-1 text-sm text-gray-500">
