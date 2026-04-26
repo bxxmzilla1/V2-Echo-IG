@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { 
   ChevronLeft, 
   MoreHorizontal, 
@@ -24,10 +24,12 @@ import {
   savePublishedProfile,
   sanitizeSlug,
   isAllowedSlug,
+  getPublishedProfileBySlug,
 } from '../services/supabasePublish';
 import { getSupabase } from '../lib/supabase';
 
 export function EditorPage() {
+  const [searchParams, setSearchParams] = useSearchParams();
   const [profile, setProfile] = useState<ProfileData>(INITIAL_PROFILE);
   const [activeTab, setActiveTab] = useState<'grid' | 'reels' | 'tagged'>('reels');
   const [isExporting, setIsExporting] = useState(false);
@@ -155,6 +157,47 @@ export function EditorPage() {
       alive = false;
     };
   }, []);
+
+  useEffect(() => {
+    const raw = searchParams.get('edit');
+    if (!raw) return;
+    const slug = sanitizeSlug(raw);
+    if (!getSupabase()) {
+      setPublishNote('Set Supabase env vars to load a page for editing.');
+      setSearchParams(
+        (p) => {
+          const n = new URLSearchParams(p);
+          n.delete('edit');
+          return n;
+        },
+        { replace: true }
+      );
+      return;
+    }
+    let cancelled = false;
+    (async () => {
+      const p = await getPublishedProfileBySlug(slug);
+      if (cancelled) return;
+      if (p) {
+        setProfile(p);
+        setPublishSlug(slug);
+        setPublishNote(`Loaded /${slug} — change anything, then Publish to update.`);
+      } else {
+        setPublishNote(`No published page at /${raw}.`);
+      }
+      setSearchParams(
+        (p) => {
+          const n = new URLSearchParams(p);
+          n.delete('edit');
+          return n;
+        },
+        { replace: true }
+      );
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [searchParams, setSearchParams]);
 
 
   return (

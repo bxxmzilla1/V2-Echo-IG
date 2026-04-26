@@ -1,18 +1,43 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { listPublishedProfiles, type PublishedListRow } from '../services/supabasePublish';
+import { Pencil, Trash2, ExternalLink, Loader2 } from 'lucide-react';
+import {
+  listPublishedProfiles,
+  deletePublishedProfile,
+  type PublishedListRow,
+} from '../services/supabasePublish';
 import { getSupabase } from '../lib/supabase';
 
 export function PublishedSitesPage() {
   const [rows, setRows] = useState<PublishedListRow[] | null>(null);
+  const [deletingSlug, setDeletingSlug] = useState<string | null>(null);
 
-  useEffect(() => {
+  const refresh = useCallback(() => {
     if (!getSupabase()) {
       setRows([]);
       return;
     }
     listPublishedProfiles().then(setRows);
   }, []);
+
+  useEffect(() => {
+    refresh();
+  }, [refresh]);
+
+  const handleDelete = async (slug: string) => {
+    if (!confirm(`Delete the published page /${slug}? This removes the live page and its stored images for that path.`)) {
+      return;
+    }
+    setDeletingSlug(slug);
+    try {
+      await deletePublishedProfile(slug);
+      await listPublishedProfiles().then(setRows);
+    } catch (e) {
+      alert(e instanceof Error ? e.message : 'Delete failed. Check Supabase RLS (published_delete + storage delete).');
+    } finally {
+      setDeletingSlug(null);
+    }
+  };
 
   if (rows === null) {
     return (
@@ -44,20 +69,50 @@ export function PublishedSitesPage() {
       {rows.length === 0 ? (
         <p className="text-gray-500">Nothing published yet. Publish from the home screen.</p>
       ) : (
-        <ul className="space-y-2">
-          {rows.map((r) => (
-            <li key={r.slug}>
-              <Link
-                to={`/${r.slug}`}
-                className="block rounded-lg border border-gray-800 bg-gray-900/50 px-4 py-3 hover:border-gray-600 transition-colors"
+        <ul className="space-y-3">
+          {rows.map((r) => {
+            const busy = deletingSlug === r.slug;
+            return (
+              <li
+                key={r.slug}
+                className="flex gap-2 rounded-lg border border-gray-800 bg-gray-900/50 p-3 items-center"
               >
-                <span className="text-ig_link font-mono">/{r.slug}</span>
-                <span className="block text-xs text-gray-500 mt-1">
-                  Updated {new Date(r.updated_at).toLocaleString()}
-                </span>
-              </Link>
-            </li>
-          ))}
+                <div className="min-w-0 flex-1">
+                  <p className="text-ig_link font-mono truncate">/{r.slug}</p>
+                  <p className="text-xs text-gray-500 mt-0.5">
+                    Updated {new Date(r.updated_at).toLocaleString()}
+                  </p>
+                </div>
+                <div className="flex items-center gap-1 shrink-0">
+                  <Link
+                    to={`/${r.slug}`}
+                    className="p-2 text-gray-400 hover:text-white rounded-lg hover:bg-white/10"
+                    title="View"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <ExternalLink className="w-4 h-4" />
+                  </Link>
+                  <Link
+                    to={`/?edit=${encodeURIComponent(r.slug)}`}
+                    className="p-2 text-gray-400 hover:text-ig_blue rounded-lg hover:bg-white/10"
+                    title="Edit in app"
+                  >
+                    <Pencil className="w-4 h-4" />
+                  </Link>
+                  <button
+                    type="button"
+                    onClick={() => handleDelete(r.slug)}
+                    disabled={busy}
+                    className="p-2 text-gray-400 hover:text-red-400 rounded-lg hover:bg-white/10 disabled:opacity-40"
+                    title="Delete"
+                  >
+                    {busy ? <Loader2 className="w-4 h-4 animate-spin" /> : <Trash2 className="w-4 h-4" />}
+                  </button>
+                </div>
+              </li>
+            );
+          })}
         </ul>
       )}
     </div>

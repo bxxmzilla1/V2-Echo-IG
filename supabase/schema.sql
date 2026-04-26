@@ -27,8 +27,7 @@ create policy "published_update"
   using (true)
   with check (true);
 
--- Optional: allow deletes
--- create policy "published_delete" on public.published_profiles for delete using (true);
+create policy "published_delete" on public.published_profiles for delete using (true);
 
 -- Storage bucket (run in SQL or use Dashboard → Storage)
 insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
@@ -45,5 +44,8 @@ create policy "profile media anon insert" on storage.objects
 create policy "profile media anon update" on storage.objects
   for update using (bucket_id = 'profile-media')
   with check (bucket_id = 'profile-media');
+
+create policy "profile media anon delete" on storage.objects
+  for delete using (bucket_id = 'profile-media');
 
 comment on table public.published_profiles is 'Echo IG published profile JSON; media URLs point to profile-media bucket.';

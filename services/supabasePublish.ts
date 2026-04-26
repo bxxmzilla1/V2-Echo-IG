@@ -137,3 +137,23 @@ export async function getPublishedProfileBySlug(slug: string): Promise<ProfileDa
   if (error || !data?.profile_data) return null;
   return data.profile_data as ProfileData;
 }
+
+/** Remove a published page. Deletes the row, then best-effort removes objects under `slug/` in storage. */
+export async function deletePublishedProfile(rawSlug: string): Promise<void> {
+  const supabase = getSupabase();
+  if (!supabase) throw new Error('Supabase is not configured (VITE_SUPABASE_URL / VITE_SUPABASE_ANON_KEY).');
+  const slug = sanitizeSlug(rawSlug);
+  if (!slug) throw new Error('Invalid slug.');
+
+  const { error: rowErr } = await supabase.from('published_profiles').delete().eq('slug', slug);
+  if (rowErr) throw new Error(rowErr.message);
+
+  const { data: files, error: listErr } = await supabase.storage
+    .from(BUCKET)
+    .list(slug, { limit: 1000 });
+  if (!listErr && files?.length) {
+    const paths = files.map((f) => `${slug}/${f.name}`);
+    const { error: rmErr } = await supabase.storage.from(BUCKET).remove(paths);
+    if (rmErr) console.warn('storage cleanup for', slug, rmErr);
+  }
+}
