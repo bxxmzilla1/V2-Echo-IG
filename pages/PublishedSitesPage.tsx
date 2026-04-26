@@ -25,9 +25,6 @@ export function PublishedSitesPage() {
   }, [refresh]);
 
   const handleDelete = async (slug: string) => {
-    if (!confirm(`Delete the published page /${slug}? This removes the live page and its stored images for that path.`)) {
-      return;
-    }
     setDeletingSlug(slug);
     try {
       await deletePublishedProfile(slug);
