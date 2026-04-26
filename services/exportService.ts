@@ -1,4 +1,5 @@
 import { ProfileData } from '../types';
+import { fetchViewerGeo, applyGeoPlaceholders } from './ipinfoService';
 
 // Helper to escape HTML special characters
 function escapeHtml(unsafe: string): string {
@@ -47,6 +48,9 @@ const svgs = {
 };
 
 export const generateExportHtml = async (profile: ProfileData): Promise<string> => {
+    const viewerGeo = await fetchViewerGeo();
+    const bioResolved = applyGeoPlaceholders(profile.bio, viewerGeo);
+
     const [
         profilePicB64,
         highlightsB64,
@@ -134,7 +138,7 @@ export const generateExportHtml = async (profile: ProfileData): Promise<string> 
             
             <div class="px-1 text-sm">
                <span class="text-gray-400 block my-0.5">${escapeHtml(profile.category)}</span>
-               <p class="block whitespace-pre-wrap leading-tight">${escapeHtml(profile.bio).replace(/\n/g, '<br>')}</p>
+               <p class="block whitespace-pre-wrap leading-tight">${escapeHtml(bioResolved).replace(/\n/g, '<br>')}</p>
                <a href="${ensureUrlProtocol(profile.link.url)}" target="_blank" rel="noopener noreferrer" class="flex items-center gap-1 mt-1 text-ig_link font-medium">
                  <svg aria-label="Link icon" fill="currentColor" height="12" role="img" viewBox="0 0 24 24" width="12"><path d="m9.364 10.776-.328-.329A6.027 6.027 0 0 0 3.65 9.07a6.028 6.028 0 0 0-2.096 9.682l3.652 3.651a6.026 6.026 0 0 0 8.524 0 6.026 6.026 0 0 0 0-8.523l-.329-.328a1 1 0 1 0-1.414 1.414l.329.328a4.026 4.026 0 0 1 0 5.695 4.026 4.026 0 0 1-5.695 0L2.97 17.337a4.029 4.029 0 0 1 1.4-6.47 4.026 4.026 0 0 1 4.294.943l.329.329a1 1 0 1 0 1.414-1.414Zm12.182-8.322a6.027 6.027 0 0 0-8.524 0l-.329.329a1 1 0 1 0 1.414 1.414l.329-.328a4.026 4.026 0 0 1 5.695 0 4.026 4.026 0 0 1 0 5.695l-3.652 3.651a4.028 4.028 0 0 1-5.694 0 4.029 4.029 0 0 1-1.4-6.47 1 1 0 1 0-1.572 1.144 6.029 6.029 0 0 0 2.096 9.683 6.026 6.026 0 0 0 8.524 0l3.651-3.651a6.027 6.027 0 0 0 0-8.524ZM13.842 8.745a1 1 0 0 0-1.414 1.414l2.828 2.829a1 1 0 1 0 1.414-1.414Z"></path></svg>
                  <span>${escapeHtml(profile.link.text)}</span>

@@ -15,6 +15,7 @@ import { INITIAL_PROFILE, ProfileData, Highlight, Reel, Post } from './types';
 import { EditableText } from './components/EditableText';
 import { EditableImage } from './components/EditableImage';
 import { generateExportHtml } from './services/exportService';
+import { fetchViewerGeo, applyGeoPlaceholders, type ViewerGeo } from './services/ipinfoService';
 
 
 // Custom icons to match IG exactly where Lucide differs slightly
@@ -46,6 +47,7 @@ export default function App() {
   const [activeTab, setActiveTab] = useState<'grid' | 'reels' | 'tagged'>('reels');
   const [isExporting, setIsExporting] = useState(false);
   const [isEditingLink, setIsEditingLink] = useState(false);
+  const [viewerGeo, setViewerGeo] = useState<ViewerGeo | null>(null);
   const linkEditorRef = useRef<HTMLDivElement>(null);
 
   // -- Handlers --
@@ -131,6 +133,16 @@ export default function App() {
         document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [isEditingLink, linkEditorRef]);
+
+  useEffect(() => {
+    let alive = true;
+    fetchViewerGeo().then((g) => {
+      if (alive) setViewerGeo(g);
+    });
+    return () => {
+      alive = false;
+    };
+  }, []);
 
 
   return (
@@ -231,6 +243,7 @@ export default function App() {
                  onChange={(v) => updateProfile('bio', v)} 
                  multiline
                  placeholder="Write your bio..."
+                 formatDisplay={(v) => applyGeoPlaceholders(v, viewerGeo)}
                />
                 
                 {isEditingLink ? (
@@ -454,8 +467,11 @@ export default function App() {
         </div>
 
 
-        <div className="text-xs text-gray-400">
+        <div className="text-xs text-gray-400 space-y-2">
           <p>Click any text or image on the phone preview to edit it directly.</p>
+          <p>
+            In the bio, <span className="text-gray-300">(country)</span> and <span className="text-gray-300">(city)</span> are replaced with the viewer&apos;s location when <code className="text-gray-500">VITE_IPINFO_TOKEN</code> is set (IPinfo).
+          </p>
         </div>
       </div>
       

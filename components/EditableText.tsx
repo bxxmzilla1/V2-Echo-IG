@@ -6,6 +6,8 @@ interface EditableTextProps {
   className?: string;
   multiline?: boolean;
   placeholder?: string;
+  /** When set, the span (non-editing) shows formatDisplay(value) but the input still edits the raw value. */
+  formatDisplay?: (value: string) => string;
 }
 
 export const EditableText: React.FC<EditableTextProps> = ({ 
@@ -13,7 +15,8 @@ export const EditableText: React.FC<EditableTextProps> = ({
   onChange, 
   className = "", 
   multiline = false,
-  placeholder = "Edit..."
+  placeholder = "Edit...",
+  formatDisplay,
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [localValue, setLocalValue] = useState(value);
@@ -68,6 +71,10 @@ export const EditableText: React.FC<EditableTextProps> = ({
     );
   }
 
+  const displayText = formatDisplay
+    ? formatDisplay(localValue)
+    : localValue;
+
   return (
     <span 
       onClick={(e) => {
@@ -77,7 +84,7 @@ export const EditableText: React.FC<EditableTextProps> = ({
       }} 
       className={`cursor-pointer hover:bg-white/10 hover:rounded px-0.5 transition-colors whitespace-pre-wrap ${className} ${!localValue ? 'opacity-50 italic' : ''}`}
     >
-      {localValue || placeholder}
+      {displayText || placeholder}
     </span>
   );
 };
