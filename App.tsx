@@ -146,11 +146,26 @@ export default function App() {
           <div className="h-12 px-4 flex justify-between items-center bg-black pt-4">
             <div className="flex items-center gap-6">
               <ChevronLeft className="w-7 h-7 cursor-pointer" />
-              <div className="flex items-center gap-1 font-bold text-lg">
+              <div className="flex items-center gap-0.5 font-bold text-lg min-w-0">
                 <EditableText 
                   value={profile.username} 
                   onChange={(v) => updateProfile('username', v)} 
                 />
+                {profile.isVerified && (
+                  <VerificationIcon
+                    className="w-[18px] h-[18px] shrink-0 text-ig_blue cursor-pointer"
+                    aria-label="Verified"
+                    onClick={() => updateProfile('isVerified', false)}
+                  />
+                )}
+                {!profile.isVerified && (
+                  <span
+                    className="w-[18px] h-[18px] rounded-full border border-gray-600 opacity-30 shrink-0 inline-block align-middle cursor-pointer"
+                    onClick={() => updateProfile('isVerified', true)}
+                    title="Show verified badge"
+                    role="button"
+                  />
+                )}
               </div>
             </div>
             <div className="flex gap-4">
@@ -185,7 +200,7 @@ export default function App() {
                         placeholder="Name"
                       />
                       {profile.isVerified && (
-                          <VerificationIcon className="w-4 h-4 text-blue-500 cursor-pointer" onClick={() => updateProfile('isVerified', false)} />
+                          <VerificationIcon className="w-4 h-4 text-ig_blue cursor-pointer" onClick={() => updateProfile('isVerified', false)} />
                       )}
                       {!profile.isVerified && (
                           <div className="w-4 h-4 rounded-full border border-gray-600 opacity-30 cursor-pointer" onClick={() => updateProfile('isVerified', true)} title="Toggle Verification"></div>

@@ -41,7 +41,7 @@ export interface ProfileData {
 
 export const INITIAL_PROFILE: ProfileData = {
   username: "avaowens",
-  isVerified: false,
+  isVerified: true,
   name: "Ava Owens",
   category: "Public figure",
   bio: "21 ✨ | FLORIDA\nsnap: sophieraiin",
