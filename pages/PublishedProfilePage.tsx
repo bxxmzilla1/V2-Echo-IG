@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { ReadOnlyProfileView } from '../components/ReadOnlyProfileView';
 import { IgLoadingLogo } from '../components/IgLoadingLogo';
 import { getPublishedProfileBySlug } from '../services/supabasePublish';
@@ -8,7 +8,6 @@ import { ProfileData } from '../types';
 
 export function PublishedProfilePage() {
   const { slug } = useParams<{ slug: string }>();
-  const navigate = useNavigate();
   const [profile, setProfile] = useState<ProfileData | null | undefined>(undefined);
   const [viewerGeo, setViewerGeo] = useState<ViewerGeo | null>(null);
 
@@ -53,11 +52,7 @@ export function PublishedProfilePage() {
 
   return (
     <div className="flex min-h-dvh w-full flex-col items-center bg-gradient-to-b from-zinc-900 via-zinc-950 to-zinc-950 pb-10 pt-0 text-zinc-100 md:pt-10">
-      <ReadOnlyProfileView
-        profile={profile}
-        viewerGeo={viewerGeo}
-        onBack={() => navigate('/')}
-      />
+      <ReadOnlyProfileView profile={profile} viewerGeo={viewerGeo} />
       <p className="mt-4 text-xs text-zinc-600">
         <Link to="/published" className="text-zinc-500 transition hover:text-zinc-400">
           All published pages

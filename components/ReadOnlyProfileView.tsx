@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ChevronLeft, MoreHorizontal, Grid, Clapperboard, Pin, Play } from 'lucide-react';
+import { MoreHorizontal, Grid, Clapperboard, Pin, Play } from 'lucide-react';
 import { ProfileData } from '../types';
 import { ReelsIcon, TaggedIcon, VerificationIcon } from './ig/ProfileIcons';
 import { applyGeoPlaceholders, type ViewerGeo } from '../services/ipinfoService';
@@ -13,10 +13,9 @@ function ensureUrl(url: string): string {
 type Props = {
   profile: ProfileData;
   viewerGeo: ViewerGeo | null;
-  onBack?: () => void;
 };
 
-export function ReadOnlyProfileView({ profile, viewerGeo, onBack }: Props) {
+export function ReadOnlyProfileView({ profile, viewerGeo }: Props) {
   const [activeTab, setActiveTab] = useState<'grid' | 'reels' | 'tagged'>('reels');
 
   const bio = applyGeoPlaceholders(profile.bio, viewerGeo);
@@ -24,20 +23,15 @@ export function ReadOnlyProfileView({ profile, viewerGeo, onBack }: Props) {
   return (
     <div className="relative flex min-h-full w-full flex-col overflow-hidden bg-black text-zinc-100 ring-white/10 md:max-h-[880px] md:w-[410px] md:rounded-[40px] md:shadow-glow md:ring-1">
       <div className="flex-1 scrollbar-hide overflow-y-auto no-scrollbar">
-        <div className="h-12 px-4 flex justify-between items-center bg-black pt-4">
-          <div className="flex items-center gap-6">
-            <button type="button" onClick={onBack} className="p-0 border-0 bg-transparent text-white" aria-label="Back">
-              <ChevronLeft className="w-7 h-7 cursor-pointer" />
-            </button>
-            <div className="flex items-center gap-0.5 font-bold text-lg min-w-0">
-              <span className="truncate">{profile.username}</span>
-              {profile.isVerified && (
-                <VerificationIcon className="w-[18px] h-[18px] shrink-0 text-ig_blue" aria-hidden />
-              )}
-            </div>
+        <div className="flex h-12 items-center justify-between bg-black px-4 pt-4">
+          <div className="flex min-w-0 items-center gap-0.5 text-lg font-bold">
+            <span className="truncate">{profile.username}</span>
+            {profile.isVerified && (
+              <VerificationIcon className="h-[18px] w-[18px] shrink-0 text-ig_blue" aria-hidden />
+            )}
           </div>
           <div className="flex gap-4">
-            <MoreHorizontal className="w-6 h-6" />
+            <MoreHorizontal className="h-6 w-6" aria-hidden />
           </div>
         </div>
 
