@@ -23,3 +23,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Local duplicate; canonical asset is public/ig-logo.jpg
+/IG logo.jpg

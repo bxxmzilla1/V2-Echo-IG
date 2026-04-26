@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { ReadOnlyProfileView } from '../components/ReadOnlyProfileView';
+import { IgLoadingLogo } from '../components/IgLoadingLogo';
 import { getPublishedProfileBySlug } from '../services/supabasePublish';
 import { fetchViewerGeo, type ViewerGeo } from '../services/ipinfoService';
 import { ProfileData } from '../types';
@@ -36,11 +37,7 @@ export function PublishedProfilePage() {
   }, [slug]);
 
   if (profile === undefined) {
-    return (
-      <div className="flex min-h-dvh items-center justify-center bg-gradient-to-b from-zinc-900 via-zinc-950 to-zinc-950 text-zinc-100">
-        <p className="text-zinc-500">Loading…</p>
-      </div>
-    );
+    return <IgLoadingLogo />;
   }
 
   if (profile === null) {

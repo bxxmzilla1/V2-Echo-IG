@@ -8,6 +8,7 @@ import {
 } from '../services/supabasePublish';
 import { getSupabase } from '../lib/supabase';
 import { APP_NAME } from '../lib/appName';
+import { IgLoadingLogo } from '../components/IgLoadingLogo';
 
 export function PublishedSitesPage() {
   const [rows, setRows] = useState<PublishedListRow[] | null>(null);
@@ -38,11 +39,7 @@ export function PublishedSitesPage() {
   };
 
   if (rows === null) {
-    return (
-      <div className="flex min-h-dvh items-center justify-center bg-gradient-to-b from-zinc-900 via-zinc-950 to-zinc-950 text-zinc-100">
-        <p className="text-zinc-500">Loading…</p>
-      </div>
-    );
+    return <IgLoadingLogo />;
   }
 
   if (!getSupabase()) {
