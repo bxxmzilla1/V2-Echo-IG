@@ -8,7 +8,6 @@ import {
 } from '../services/supabasePublish';
 import { getSupabase } from '../lib/supabase';
 import { APP_NAME } from '../lib/appName';
-import { IgLoadingLogo } from '../components/IgLoadingLogo';
 
 export function PublishedSitesPage() {
   const [rows, setRows] = useState<PublishedListRow[] | null>(null);
@@ -39,7 +38,7 @@ export function PublishedSitesPage() {
   };
 
   if (rows === null) {
-    return <IgLoadingLogo />;
+    return <div className="min-h-dvh w-full bg-black" aria-busy="true" aria-label="Loading" />;
   }
 
   if (!getSupabase()) {

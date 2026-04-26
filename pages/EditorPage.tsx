@@ -372,8 +372,8 @@ export function EditorPage() {
                      >
                        <X size={14} className="bg-gray-800 rounded-full border border-gray-700" />
                      </button>
-                     <div className="w-[64px] h-[64px] rounded-full bg-gray-800 border border-gray-700 p-[1px]">
-                       <div className="w-full h-full rounded-full overflow-hidden bg-black">
+                     <div className="w-[64px] h-[64px] rounded-full border border-gray-700 bg-black p-px">
+                       <div className="h-full w-full overflow-hidden rounded-full bg-black">
                           <EditableImage 
                              src={hl.imageUrl} 
                              onChange={(v) => updateHighlight(hl.id, 'imageUrl', v)} 
@@ -425,7 +425,7 @@ export function EditorPage() {
           {activeTab === 'grid' && (
             <div className="grid grid-cols-3 gap-0.5 pb-4">
                {profile.posts.map(post => (
-                 <div key={post.id} className="relative aspect-square overflow-hidden bg-zinc-800 group">
+                 <div key={post.id} className="group relative aspect-square overflow-hidden bg-black">
                     <EditableImage 
                        src={post.imageUrl} 
                        onChange={(v) => updatePost(post.id, { imageUrl: v })}
@@ -460,7 +460,7 @@ export function EditorPage() {
           {activeTab === 'reels' && (
             <div className="grid grid-cols-3 gap-0.5 pb-4">
               {profile.reels.map((reel) => (
-                <div key={reel.id} className="relative aspect-[3/4] bg-zinc-800 group">
+                <div key={reel.id} className="group relative aspect-[3/4] bg-black">
                   <EditableImage
                     src={reel.imageUrl}
                     onChange={(v) => updateReel(reel.id, { imageUrl: v })}

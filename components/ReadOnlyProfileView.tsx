@@ -3,6 +3,7 @@ import { ChevronLeft, MoreHorizontal, Grid, Clapperboard, Pin, Play } from 'luci
 import { ProfileData } from '../types';
 import { ReelsIcon, TaggedIcon, VerificationIcon } from './ig/ProfileIcons';
 import { applyGeoPlaceholders, type ViewerGeo } from '../services/ipinfoService';
+import { getImageUrl480 } from '../lib/imageDisplayUrl';
 
 function ensureUrl(url: string): string {
   if (!url) return '#';
@@ -44,7 +45,15 @@ export function ReadOnlyProfileView({ profile, viewerGeo, onBack }: Props) {
           <div className="flex items-center justify-between mb-4">
             <div className="w-[88px] h-[88px] rounded-full bg-gradient-to-tr from-[#f9ce34] via-[#ee2a7b] to-[#6228d7] p-[2.5px]">
               <div className="w-full h-full rounded-full bg-black p-[2.5px]">
-                <img src={profile.profilePic} alt="" className="w-full h-full object-cover rounded-full" />
+                <img
+                  src={getImageUrl480(profile.profilePic)}
+                  alt=""
+                  className="h-full w-full rounded-full object-cover"
+                  width={80}
+                  height={80}
+                  loading="eager"
+                  decoding="async"
+                />
               </div>
             </div>
             <div className="flex flex-col flex-1 ml-4 justify-center">
@@ -104,9 +113,17 @@ export function ReadOnlyProfileView({ profile, viewerGeo, onBack }: Props) {
           <div className="flex gap-4 mt-6 overflow-x-auto no-scrollbar pb-2 px-1">
             {profile.highlights.map((hl) => (
               <div key={hl.id} className="flex flex-col items-center gap-1 min-w-[70px]">
-                <div className="h-[64px] w-[64px] rounded-full border border-white/10 bg-zinc-800 p-px">
-                  <div className="w-full h-full rounded-full overflow-hidden bg-black">
-                    <img src={hl.imageUrl} alt="" className="w-full h-full opacity-90 object-cover" />
+                <div className="h-[64px] w-[64px] rounded-full border border-white/10 bg-black p-px">
+                  <div className="h-full w-full overflow-hidden rounded-full bg-black">
+                    <img
+                      src={getImageUrl480(hl.imageUrl)}
+                      alt=""
+                      className="h-full w-full object-cover opacity-90"
+                      width={64}
+                      height={64}
+                      loading="lazy"
+                      decoding="async"
+                    />
                   </div>
                 </div>
                 <span className="text-xs text-center truncate w-full">{hl.title}</span>
@@ -148,8 +165,16 @@ export function ReadOnlyProfileView({ profile, viewerGeo, onBack }: Props) {
         {activeTab === 'grid' && (
           <div className="grid grid-cols-3 gap-0.5 pb-4">
             {profile.posts.map((post) => (
-              <div key={post.id} className="relative aspect-square overflow-hidden bg-zinc-800">
-                <img src={post.imageUrl} alt="" className="w-full h-full object-cover" />
+              <div key={post.id} className="relative aspect-square overflow-hidden bg-black">
+                <img
+                  src={getImageUrl480(post.imageUrl)}
+                  alt=""
+                  className="h-full w-full object-cover"
+                  width={240}
+                  height={240}
+                  loading="lazy"
+                  decoding="async"
+                />
                 <div className="absolute top-2 right-2 flex flex-col gap-1 pointer-events-none">
                   {post.isPinned && <Pin size={16} className="fill-white text-white rotate-45 drop-shadow-md" />}
                   {post.isVideo && <Play size={16} className="fill-white text-white drop-shadow-md" />}
@@ -167,9 +192,17 @@ export function ReadOnlyProfileView({ profile, viewerGeo, onBack }: Props) {
                 href={ensureUrl(profile.reelsUrl)}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="relative block aspect-[3/4] bg-zinc-800"
+                className="relative block aspect-[3/4] bg-black"
               >
-                <img src={reel.imageUrl} alt="" className="w-full h-full object-cover" />
+                <img
+                  src={getImageUrl480(reel.imageUrl)}
+                  alt=""
+                  className="h-full w-full object-cover"
+                  width={180}
+                  height={240}
+                  loading="lazy"
+                  decoding="async"
+                />
                 <div className="absolute bottom-0 left-0 right-0 h-1/3 bg-gradient-to-t from-black/60 to-transparent pointer-events-none" />
                 <div className="absolute bottom-2 left-2 flex items-center gap-1 text-white text-xs font-bold drop-shadow-md z-10">
                   <Play size={14} fill="currentColor" />
