@@ -17,9 +17,9 @@ export function IgLoadingLogo({ className = '' }: Props) {
       <img
         src={src}
         alt="Loading"
-        width={120}
-        height={120}
-        className="max-h-28 w-auto max-w-full animate-pulse object-contain"
+        width={64}
+        height={64}
+        className="h-16 w-16 max-w-[min(4rem,25vw)] animate-pulse object-contain"
         decoding="async"
       />
     </div>
