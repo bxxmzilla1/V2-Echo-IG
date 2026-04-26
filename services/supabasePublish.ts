@@ -138,22 +138,115 @@ export async function getPublishedProfileBySlug(slug: string): Promise<ProfileDa
   return data.profile_data as ProfileData;
 }
 
-/** Remove a published page. Deletes the row, then best-effort removes objects under `slug/` in storage. */
+/** Extracts storage object path (e.g. "slug/file.png") from a public or signed object URL. */
+function objectPathFromMediaUrl(url: string): string | null {
+  if (!url || url.startsWith('data:') || !url.includes(BUCKET)) return null;
+  const marker = `/${BUCKET}/`;
+  const i = url.indexOf(marker);
+  if (i === -1) return null;
+  const path = url.slice(i + marker.length).split('?')[0].split('#')[0];
+  try {
+    return decodeURIComponent(path);
+  } catch {
+    return path;
+  }
+}
+
+function collectStorageObjectPathsFromProfile(profile: ProfileData): string[] {
+  const s = new Set<string>();
+  const add = (u: string) => {
+    const p = objectPathFromMediaUrl(u);
+    if (p) s.add(p);
+  };
+  add(profile.profilePic);
+  for (const h of profile.highlights) add(h.imageUrl);
+  for (const p of profile.posts) add(p.imageUrl);
+  for (const r of profile.reels) add(r.imageUrl);
+  return [...s];
+}
+
+function chunkArray<T>(arr: T[], size: number): T[][] {
+  const out: T[][] = [];
+  for (let i = 0; i < arr.length; i += size) out.push(arr.slice(i, i + size));
+  return out;
+}
+
+/** DFS: delete all files, recurse into prefix “folders” (metadata null), bounded passes per folder to clear >1k files. */
+async function removeAllObjectsUnderPath(
+  supabase: NonNullable<ReturnType<typeof getSupabase>>,
+  pathPrefix: string
+): Promise<void> {
+  for (let pass = 0; pass < 100; pass++) {
+    const { data: items, error: listErr } = await supabase.storage
+      .from(BUCKET)
+      .list(pathPrefix, { limit: 1000, sortBy: { column: 'name', order: 'asc' } });
+    if (listErr) {
+      console.warn('storage list', pathPrefix, listErr);
+      return;
+    }
+    if (!items?.length) return;
+
+    const filePaths: string[] = [];
+    const subDirs: string[] = [];
+    for (const item of items) {
+      const objectPath = pathPrefix ? `${pathPrefix}/${item.name}` : item.name;
+      if (item.metadata != null) filePaths.push(objectPath);
+      else subDirs.push(objectPath);
+    }
+    for (const batch of chunkArray(filePaths, 1000)) {
+      if (batch.length) {
+        const { error: rm } = await supabase.storage.from(BUCKET).remove(batch);
+        if (rm) console.warn('storage remove batch', pathPrefix, rm);
+      }
+    }
+    for (const d of subDirs) {
+      await removeAllObjectsUnderPath(supabase, d);
+    }
+  }
+}
+
+/** Remove a published page: delete DB row (verified), then all media in profile + full folder cleanup. */
 export async function deletePublishedProfile(rawSlug: string): Promise<void> {
   const supabase = getSupabase();
   if (!supabase) throw new Error('Supabase is not configured (VITE_SUPABASE_URL / VITE_SUPABASE_ANON_KEY).');
   const slug = sanitizeSlug(rawSlug);
   if (!slug) throw new Error('Invalid slug.');
 
-  const { error: rowErr } = await supabase.from('published_profiles').delete().eq('slug', slug);
-  if (rowErr) throw new Error(rowErr.message);
+  const { data: before, error: fetchErr } = await supabase
+    .from('published_profiles')
+    .select('profile_data, slug')
+    .eq('slug', slug)
+    .maybeSingle();
+  if (fetchErr) throw new Error(fetchErr.message);
+  if (!before)
+    throw new Error(
+      `No page found for /${slug}. It may have already been deleted.`
+    );
 
-  const { data: files, error: listErr } = await supabase.storage
-    .from(BUCKET)
-    .list(slug, { limit: 1000 });
-  if (!listErr && files?.length) {
-    const paths = files.map((f) => `${slug}/${f.name}`);
-    const { error: rmErr } = await supabase.storage.from(BUCKET).remove(paths);
-    if (rmErr) console.warn('storage cleanup for', slug, rmErr);
+  const profile = before.profile_data as ProfileData;
+  const pathsFromJson = collectStorageObjectPathsFromProfile(profile);
+
+  const { data: removedRows, error: delErr } = await supabase
+    .from('published_profiles')
+    .delete()
+    .eq('slug', slug)
+    .select('slug');
+  if (delErr) throw new Error(delErr.message);
+  if (!removedRows?.length) {
+    throw new Error(
+      'Delete was blocked. In Supabase → SQL, ensure policy "published_delete" exists (see supabase/schema.sql or 002_add_delete_policies.sql).'
+    );
+  }
+
+  for (const batch of chunkArray(pathsFromJson, 1000)) {
+    if (!batch.length) continue;
+    const { error: rm } = await supabase.storage.from(BUCKET).remove(batch);
+    if (rm) console.warn('storage remove (from profile json)', rm);
+  }
+
+  try {
+    await removeAllObjectsUnderPath(supabase, slug);
+  } catch (e) {
+    console.warn('storage folder cleanup', slug, e);
   }
 }
